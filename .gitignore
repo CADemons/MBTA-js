@@ -77,7 +77,7 @@ Thumbs.db
 
 # Other #
 #########
-gulpfile.js
-jsdoc.json
+#gulpfile.js
+#jsdoc.json
 Gruntfile.js
 key.json
