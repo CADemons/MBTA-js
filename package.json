@@ -2,7 +2,7 @@
   "name": "mbta-js",
   "version": "0.1.0",
   "description": "MBTA Realtime API Helper Library written in javascript.",
-  "main": "index.js",
+  "main": "./src/index",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,5 +18,20 @@
   "bugs": {
     "url": "https://github.com/CADemons/MBTA-js/issues"
   },
-  "homepage": "https://github.com/CADemons/MBTA-js#readme"
+  "homepage": "https://github.com/CADemons/MBTA-js#readme",
+  "dependencies": {
+    "array-unique": "0.3.2",
+    "grunt": "1.0.1",
+    "xmlhttprequest": "1.8.0",
+    "jsdoc": "git://github.com/jsdoc3/jsdoc.git"
+  },
+  "devDependencies": {
+    "chalk": "1.1.3",
+    "docdash": "0.4.0",
+    "grunt": "1.0.1",
+    "grunt-bump": "0.8.0",
+    "gulp": "3.9.1",
+    "gulp-shell": "0.5.2",
+    "jsdoc": "git://github.com/jsdoc3/jsdoc.git"
+  }
 }
