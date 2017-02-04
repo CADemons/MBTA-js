@@ -18,7 +18,7 @@ const unique = require('array-unique');
 class Routes {
 
   /**
-  * Creates a new Routes object
+  * Creates a new Routes object.
   * @class
   *
   * @constructor
