@@ -62,10 +62,9 @@ class Routes {
   */
   getModeByRouteId(id) {
     if (typeof id !== undefined && typeof id === "number") id +='';
-    id = id.toLowerCase().capitalize();
     for (var mode in this.raw.mode)
       for (var route in this.raw.mode[mode].route)
-        if (this.raw.mode[mode].route[route].route_id === id)
+        if (this.raw.mode[mode].route[route].route_id.toLowerCase() === id.toLowerCase())
           return this.raw.mode[mode];
     return null;
   }
@@ -78,9 +77,8 @@ class Routes {
   */
   getModeByRouteType(id) {
     if (typeof id !== undefined && typeof id === "number") id+='';
-    id = id.toLowerCase().capitalize();
     for (var mode in this.raw.mode)
-      if (this.raw.mode[mode].route_type === id)
+      if (this.raw.mode[mode].route_type.toLowerCase() === id.toLowerCase())
         return this.raw.mode[mode];
     return null
   }
@@ -93,12 +91,21 @@ class Routes {
   */
   getModeByRouteName(name) {
     if (typeof name !== undefined && typeof name === "number") name+='';
-    name = name.toLowerCase().capitalize();
     for (var mode in this.raw.mode)
       for (var route in this.raw.mode[mode].route)
-        if (this.raw.mode[mode].route[route].route_name === name)
+        if (this.raw.mode[mode].route[route].route_name.toLowerCase() === name.toLowerCase())
           return this.raw.mode[mode];
     return null
+  }
+
+  /**
+  * Returns the transporation mode which includes the route (in json).
+  * @param {JSON} route The route json.
+  * @return {JSON} the transportation mode if the route exists.
+  * @return {null}
+  */
+  getModeByRoute(route) {
+    return (this.getModeByRouteName(route.route_name) !== null) ? this.getModeByRouteName(route.route_name) : null
   }
 
   /**
@@ -114,6 +121,62 @@ class Routes {
       for (var route in modes[mode].route)
         arr.push(modes[mode].route[route]);
     return arr || null;
+  }
+
+  /**
+  * Returns the route with the provided route_id identifier.
+  * @param {(String|Number)} id The route_id for the route either as a string or a number.
+  * @returns {JSON} if the provided id is a part of a transportation mode.
+  * @returns {null} otherwise.
+  */
+  getRouteById(id) {
+    if (typeof id !== undefined && typeof id === "number") id +='';
+    for (var mode in this.raw.mode)
+      for (var route in this.raw.mode[mode].route)
+        if (this.raw.mode[mode].route[route].route_id.toLowerCase() === id.toLowerCase())
+          return this.raw.mode[mode].route[route];
+    return null;
+  }
+
+  /**
+  * Returns the route with the provided route_name identifier.
+  * @param {(String|Number)} name The route_name either as a string or a number.
+  * @returns {JSON} if the provided route_name is a part of a tranporation mode.
+  * @returns {null}
+  */
+  getRouteByName(name) {
+    if (typeof name !== undefined && typeof name === "number") name+='';
+    for (var mode in this.raw.mode)
+      for (var route in this.raw.mode[mode].route)
+        if (this.raw.mode[mode].route[route].route_name.toLowerCase() === name.toLowerCase())
+          return this.raw.mode[mode].route[route];
+    return null
+  }
+
+  /**
+  * Returns the route_hide value if it has one.
+  * @example
+  * routes.checkHide(routes.getRouteByName("72/75"))
+  * @param {(JSON|String|Number)} route The route-json or the route-id or the route-name.
+  * @returns {Boolean} If the the route has the property
+  * @returns {null}
+  */
+  checkHide(route) {
+    switch (typeof route) {
+      case "object":
+        return (route.hasOwnProperty("route_hide")) ? route.route_hide : null
+      case "string":
+        if (this.getRouteByName(route) !== null) return this.checkHide(this.getRouteByName(route));
+        else if (this.getRouteById(route) !== null) return this.checkHide(this.getRouteById(route));
+        else throw "Route-id or route-name invalid!";
+        break;
+      case "number":
+        route += '';
+        return this.checkHide(route);
+      default:
+        throw "Invalid parameter";
+    }
+    return null;
   }
 
 }
