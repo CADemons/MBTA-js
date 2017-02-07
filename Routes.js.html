@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Routes.html">Routes</a><ul class='methods'><li data-type='method'><a href="Routes.html#getModeList">getModeList</a></li><li data-type='method'><a href="Routes.html#getModes">getModes</a></li><li data-type='method'><a href="Routes.html#getRoutes">getRoutes</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Routes.html">Routes</a><ul class='methods'><li data-type='method'><a href="Routes.html#checkHide">checkHide</a></li><li data-type='method'><a href="Routes.html#getModeByRoute">getModeByRoute</a></li><li data-type='method'><a href="Routes.html#getModeByRouteId">getModeByRouteId</a></li><li data-type='method'><a href="Routes.html#getModeByRouteName">getModeByRouteName</a></li><li data-type='method'><a href="Routes.html#getModeByRouteType">getModeByRouteType</a></li><li data-type='method'><a href="Routes.html#getModeList">getModeList</a></li><li data-type='method'><a href="Routes.html#getModes">getModes</a></li><li data-type='method'><a href="Routes.html#getRouteById">getRouteById</a></li><li data-type='method'><a href="Routes.html#getRouteByName">getRouteByName</a></li><li data-type='method'><a href="Routes.html#getRoutes">getRoutes</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -52,12 +52,13 @@
 const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const Key = require('../key.json').key;
 const unique = require('array-unique');
+const req = new XMLHttpRequest();
 
 
 class Routes {
 
   /**
-  * Creates a new Routes object
+  * Creates a new Routes object.
   * @class
   *
   * @constructor
@@ -69,7 +70,7 @@ class Routes {
 
   /**
   * Returns an array of current transportation modes.
-  * @returns {String&lt;Array>}
+  * @returns {String[]}
   */
   getModeList() {
     let arr = [];
@@ -81,8 +82,8 @@ class Routes {
   /**
   * Returns the modes with the provided mode name as an Array of JSON.
   * @param {String} name The name of the transportation mode.
-  * @returns {Array&lt;JSON>} if the provided mode is a transporation mode.
-  * @returns {null}
+  * @returns {JSON[]} if the provided mode is a transporation mode.
+  * @returns {null} otherwise.
   */
   getModes(name) {
     let arr = []
@@ -93,10 +94,64 @@ class Routes {
   }
 
   /**
+  * Returns the transportation mode which includes a route with the provided route_id identifier.
+  * @param {(String|Number)} id The route_id for the route either as a string or a number.
+  * @returns {JSON} if the provided id is a part of a transportation mode.
+  * @returns {null} otherwise.
+  */
+  getModeByRouteId(id) {
+    if (typeof id !== undefined &amp;&amp; typeof id === "number") id +='';
+    for (var mode in this.raw.mode)
+      for (var route in this.raw.mode[mode].route)
+        if (this.raw.mode[mode].route[route].route_id.toLowerCase() === id.toLowerCase())
+          return this.raw.mode[mode];
+    return null;
+  }
+
+  /**
+  * Returns the transporation mode which is assigned the route type.
+  * @param {(String|Number)} id The route_type either as a string or a number.
+  * @returns {JSON} if the provided route_type is a part of a transporation mode.
+  * @returns {null}
+  */
+  getModeByRouteType(id) {
+    if (typeof id !== undefined &amp;&amp; typeof id === "number") id+='';
+    for (var mode in this.raw.mode)
+      if (this.raw.mode[mode].route_type.toLowerCase() === id.toLowerCase())
+        return this.raw.mode[mode];
+    return null
+  }
+
+  /**
+  * Returns the transporation mode which includes a route with the provided route_name identifier.
+  * @param {(String|Number)} name The route_name either as a string or a number.
+  * @returns {JSON} if the provided route_name is a part of a tranporation mode.
+  * @returns {null}
+  */
+  getModeByRouteName(name) {
+    if (typeof name !== undefined &amp;&amp; typeof name === "number") name+='';
+    for (var mode in this.raw.mode)
+      for (var route in this.raw.mode[mode].route)
+        if (this.raw.mode[mode].route[route].route_name.toLowerCase() === name.toLowerCase())
+          return this.raw.mode[mode];
+    return null
+  }
+
+  /**
+  * Returns the transporation mode which includes the route (in json).
+  * @param {JSON} route The route json.
+  * @return {JSON} the transportation mode if the route exists.
+  * @return {null}
+  */
+  getModeByRoute(route) {
+    return (this.getModeByRouteName(route.route_name) !== null) ? this.getModeByRouteName(route.route_name) : null
+  }
+
+  /**
   * Returns the routes for the provided mode name as an Array of JSON.
   * @param {String} name The name of the transportation mode.
-  * @returns {Array&lt;JSON>} if the provided mode is a transportation mode.
-  * @returns {null}
+  * @returns {JSON[]} if the provided mode is a transportation mode.
+  * @returns {null} otherwise.
   */
   getRoutes(name) {
     let arr = [];
@@ -106,17 +161,83 @@ class Routes {
         arr.push(modes[mode].route[route]);
     return arr || null;
   }
+
+  /**
+  * Returns the route with the provided route_id identifier.
+  * @param {(String|Number)} id The route_id for the route either as a string or a number.
+  * @returns {JSON} if the provided id is a part of a transportation mode.
+  * @returns {null} otherwise.
+  */
+  getRouteById(id) {
+    if (typeof id !== undefined &amp;&amp; typeof id === "number") id +='';
+    for (var mode in this.raw.mode)
+      for (var route in this.raw.mode[mode].route)
+        if (this.raw.mode[mode].route[route].route_id.toLowerCase() === id.toLowerCase())
+          return this.raw.mode[mode].route[route];
+    return null;
+  }
+
+  /**
+  * Returns the route with the provided route_name identifier.
+  * @param {(String|Number)} name The route_name either as a string or a number.
+  * @returns {JSON} if the provided route_name is a part of a tranporation mode.
+  * @returns {null}
+  */
+  getRouteByName(name) {
+    if (typeof name !== undefined &amp;&amp; typeof name === "number") name+='';
+    for (var mode in this.raw.mode)
+      for (var route in this.raw.mode[mode].route)
+        if (this.raw.mode[mode].route[route].route_name.toLowerCase() === name.toLowerCase())
+          return this.raw.mode[mode].route[route];
+    return null
+  }
+
+  /**
+  * Returns the route_hide value if it has one.
+  * @example
+  * routes.checkHide(routes.getRouteByName("72/75"))
+  * @param {(JSON|String|Number)} route The route-json or the route-id or the route-name.
+  * @returns {Boolean} If the the route has the property
+  * @returns {null}
+  */
+  checkHide(route) {
+    switch (typeof route) {
+      case "object":
+        return (route.hasOwnProperty("route_hide")) ? route.route_hide : null
+      case "string":
+        if (this.getRouteByName(route) !== null) return this.checkHide(this.getRouteByName(route));
+        else if (this.getRouteById(route) !== null) return this.checkHide(this.getRouteById(route));
+        else throw "Route-id or route-name invalid!";
+        break;
+      case "number":
+        route += '';
+        return this.checkHide(route);
+      default:
+        throw "Invalid parameter";
+    }
+    return null;
+  }
+
 }
 
 /**
 * @private
 */
 function request() {
-    var request = new XMLHttpRequest();
-    request.open('GET', `http://realtime.mbta.com/developer/api/v2/routes?api_key=${Key}&amp;format=json`, false);
-    request.send();
-    if (request.status === 200)
-      return JSON.parse(request.responseText);
+    req.open('GET', `http://realtime.mbta.com/developer/api/v2/routes?api_key=${Key}&amp;format=json`, false);
+    req.send();
+    if (req.status === 200)
+      return JSON.parse(req.responseText);
+}
+
+/**
+* @private
+* From stackoverflow...
+*/
+String.prototype.capitalize = function() {
+  return this.replace(/(^|\s)([a-z])/g, function(m, p1, p2) {
+    return p1 + p2.toUpperCase();
+  });
 }
 
 module.exports = Routes;
@@ -132,7 +253,7 @@ module.exports = Routes;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.0-dev</a> on Sat Feb 04 2017 16:11:58 GMT-0500 (EST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.0-dev</a> on Tue Feb 07 2017 17:23:42 GMT-0500 (EST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
