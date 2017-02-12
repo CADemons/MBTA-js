@@ -21,7 +21,7 @@ class RoutesByStop {
      * @class
      *
      * @constructor
-     * @param {(String|Number)} GTFS-compatible stop_id value for which routes should be returned.
+     * @param {(String|Number)} stop GTFS-compatible stop_id value for which routes should be returned.
      * @property {JSON} raw Raw json from Routes request.
      */
     constructor(stop) {
