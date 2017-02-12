@@ -15,11 +15,10 @@ const Key = require('../key.json').key;
 const unique = require('array-unique');
 const req = new XMLHttpRequest();
 
-
 class Routes {
 
   /**
-  * Creates a new Routes object.
+  * Creates a new Routes query object.
   * @class
   *
   * @constructor
