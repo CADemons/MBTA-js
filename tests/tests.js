@@ -1,4 +1,4 @@
-const Routes = require('../src/routes/Routes');
-var routes = new Routes();
-console.log(routes.raw);
+const StopsByRoute = require('../src/stops/StopsByRoute');
+var routes = new StopsByRoute("Red");
+console.log(routes.getDirectionByName("Southbound"));
 //console.log(routes.checkHide("72/75"));
