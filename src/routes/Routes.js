@@ -4,16 +4,15 @@
 *
 * @author Colin Rioux
 *
-* @requires NPM:XMLHttpRequest
 * @requires NPM:array-unique
 * @requires /src/key.json
+* @requires /src/util/request.js
 */
 "use strict";
 // npm dependencies
-const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const Key = require('../key.json').key;
 const unique = require('array-unique');
-const req = new XMLHttpRequest();
+const RHelper = require('../util/request');
 
 class Routes {
 
@@ -25,7 +24,7 @@ class Routes {
   * @property {JSON} raw Raw json from Routes request.
   */
   constructor() {
-    this.raw = request();
+    this.raw = RHelper.request("routes", {});
   }
 
   /**
@@ -178,16 +177,6 @@ class Routes {
     return null;
   }
 
-}
-
-/**
-* @private
-*/
-function request() {
-    req.open('GET', `http://realtime.mbta.com/developer/api/v2/routes?api_key=${Key}&format=json`, false);
-    req.send();
-    if (req.status === 200)
-      return JSON.parse(req.responseText);
 }
 
 /**

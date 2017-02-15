@@ -1,19 +1,18 @@
 /**
- * Accesses Route Query: Routes
+ * Accesses Route Query: RoutesByStop
  * @license MIT
  *
  * @author Colin Rioux
  *
- * @requires NPM:XMLHttpRequest
  * @requires NPM:array-unique
  * @requires /src/key.json
+ * @requires /src/util/request.js
  */
 "use strict";
 // npm dependencies
-const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const Key = require('../key.json').key;
+const RHelper = require('../util/request');
 const unique = require('array-unique');
-const req = new XMLHttpRequest();
 
 class RoutesByStop {
     /**
@@ -27,10 +26,10 @@ class RoutesByStop {
     constructor(stop) {
         switch (typeof stop) {
             case "string":
-                this.raw = request(stop);
+                this.raw = RHelper.request('routesbystop', { "stop" : stop });
                 break;
             case "number":
-                this.raw = request(stop += '');
+                this.raw = RHelper.request('routesbystop', { "stop" : stop.toString() });
                 break;
             default:
                 throw "Invalid GTFS-compatible stop_id value";
@@ -59,17 +58,6 @@ class RoutesByStop {
 
 /**
  * @private
- */
-function request(stop) {
-    req.open('GET', `http://realtime.mbta.com/developer/api/v2/routesbystop?api_key=${Key}&stop=${stop}&format=json`, false);
-    req.send();
-    if (req.status === 200)
-        return JSON.parse(req.responseText);
-}
-
-/**
- * @private
- * From stackoverflow...
  */
 String.prototype.capitalize = function() {
     return this.replace(/(^|\s)([a-z])/g, function(m, p1, p2) {
