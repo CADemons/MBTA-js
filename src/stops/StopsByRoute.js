@@ -1,5 +1,5 @@
 /**
- * Accesses Route Query: StopsByRoute
+ * Accesses Route Query: StopsByRoute. 
  * @license MIT
  *
  * @author Colin Rioux
@@ -9,7 +9,6 @@
  * @requires /src/util/request.js
  */
 "use strict";
-// npm dependencies
 const Key = require('../key.json').key;
 const RHelper = require('../util/request');
 const unique = require('array-unique');
@@ -20,10 +19,18 @@ class StopsByRoute {
     * @class
     *
     * @constructor
-    * @param {String} stop GTFS-compatible route_id value for which stops should be returned
-    * @property {JSON} raw Raw json from Routes request.
+    * @param {String} route GTFS-compatible route_id value for which stops should be returned.
+    * @property {JSON} raw Raw json from StopsByRoute request.
     */
     constructor(route) {
+        this.raw = RHelper.request('stopsbyroute', { "route" : route });
+    }
+
+    /**
+    * Refreshes the API without requiring a new StopsByRoute object; this overwrites the current raw json.
+    * @param {String} route GTFS-compatible route_id value for which stops should be returned.
+    */
+    refresh(route) {
         this.raw = RHelper.request('stopsbyroute', { "route" : route });
     }
 

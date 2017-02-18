@@ -9,7 +9,6 @@
 * @requires /src/util/request.js
 */
 "use strict";
-// npm dependencies
 const Key = require('../key.json').key;
 const unique = require('array-unique');
 const RHelper = require('../util/request');
@@ -25,6 +24,13 @@ class Routes {
   */
   constructor() {
     this.raw = RHelper.request("routes", {});
+  }
+
+  /**
+  * Refreshes the API without requiring a new Routes object; this overwrites the current raw json.
+  */
+  refresh() {
+      this.raw = RHelper.request("routes", {});
   }
 
   /**

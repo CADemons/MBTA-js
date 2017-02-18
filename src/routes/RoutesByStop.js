@@ -9,7 +9,6 @@
  * @requires /src/util/request.js
  */
 "use strict";
-// npm dependencies
 const Key = require('../key.json').key;
 const RHelper = require('../util/request');
 const unique = require('array-unique');
@@ -24,6 +23,24 @@ class RoutesByStop {
      * @property {JSON} raw Raw json from Routes request.
      */
     constructor(stop) {
+        switch (typeof stop) {
+            case "string":
+                this.raw = RHelper.request('routesbystop', { "stop" : stop });
+                break;
+            case "number":
+                this.raw = RHelper.request('routesbystop', { "stop" : stop.toString() });
+                break;
+            default:
+                throw "Invalid GTFS-compatible stop_id value";
+                break;
+        }
+    }
+
+    /**
+    * Refreshes the API without requiring a new RoutesByStop object; this overwrites the current raw json.
+    * @param {String|Number} stop GTFS-compatible stop_id value for which routes should be returned.
+    */
+    refresh(stop) {
         switch (typeof stop) {
             case "string":
                 this.raw = RHelper.request('routesbystop', { "stop" : stop });
