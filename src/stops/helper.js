@@ -1,4 +1,4 @@
-/**
+/*
  * It felt unnecessary to write a class for a stop, since the jsons are straightforward; so here is a helper with functions.
  * @license MIT
  *
