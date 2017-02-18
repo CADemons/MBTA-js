@@ -186,8 +186,8 @@ class Routes {
 }
 
 /**
+* Capitalizes strings.
 * @private
-* From stackoverflow...
 */
 String.prototype.capitalize = function() {
   return this.replace(/(^|\s)([a-z])/g, function(m, p1, p2) {

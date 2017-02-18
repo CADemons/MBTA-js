@@ -13,8 +13,7 @@
     ],
     "opts": {
         "template": "node_modules/docdash",
-        // "tutorials": "./tutorials",
-        "readme": "./README.md",
+        "readme": "./README_DOCS.md",
         "encoding": "utf8",
         "destination": "docs/",
         "recurse": true,
@@ -25,7 +24,7 @@
         "monospaceLinks": false
     },
     "docdash": {
-        "static": true,  // Display the static members inside the navbar
-        "sort": true     // Sort the methods in the navbar
+        "static": true,
+        "sort": true
     }
 }

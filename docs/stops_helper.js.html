@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>stops/helper.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,30 +27,71 @@
 
 <div id="main">
     
+    <h1 class="page-title">stops/helper.js</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * It felt unnecessary to write a class for a stop, since the jsons are straightforward; so here is a helper with functions.
+ * @license MIT
+ *
+ * @author Colin Rioux
+ *
+ */
 
 
+function findStopById(stops, id) {
+    for (var stop in stops) {
+        if (stops[stop].stop_id === id) return stops[stop];
+    }
+    return null;
+}
+
+function findStopByName(stops, id) {
+    for (var stop in stops) {
+        if (stops[stop].stop_name.split(' ').join('').toLowerCase() === name.toLowerCase()) return stops[stop];
+    }
+    return null;
+}
+
+function findStopByParent(stops, gtfs) {
+    for (var stop in stops) {
+        if (stops[stop].parent_station === gtfs) return stops[stop];
+    }
+    return null;
+}
+
+function findStopByParentName(stops, name) {
+    for (var stop in stops) {
+        if (stops[stop].parent_station_name.toLowerCase() === name.toLowerCase()) return stops[stop];
+    }
+    return null;
+}
+
+function findStopByCoords(stops, lat, lon) {
+    for (var stop in stops) {
+        if (stops[stop].stop_lat === lat &amp;&amp; stops[stop].stop_lon === lon) return stops[stop];
+    }
+    return null;
+}
 
 
-
-
-
-
-
-    
-
-
-    <section class="readme">
-        <article><h1>MBTA-js</h1><p>MBTA Realtime API Helper Library written in javascript.</p>
-<h4>Useful Links</h4><p><a href="http://realtime.mbta.com/Portal/Content/Documents/MBTA-realtime_APIDocumentation_v2_1_3_2017-01-04.pdf">MBTA Realtime API Docs</a></p></article>
+module.exports = {
+    findStopById,
+    findStopByName,
+    findStopByParent,
+    findStopByParentName,
+    findStopByCoords
+}
+</code></pre>
+        </article>
     </section>
-
-
 
 
 
