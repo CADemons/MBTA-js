@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Routes.js - Documentation</title>
+    <title>routes/Routes.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -22,12 +22,12 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Routes.html">Routes</a><ul class='methods'><li data-type='method'><a href="Routes.html#checkHide">checkHide</a></li><li data-type='method'><a href="Routes.html#getModeByRoute">getModeByRoute</a></li><li data-type='method'><a href="Routes.html#getModeByRouteId">getModeByRouteId</a></li><li data-type='method'><a href="Routes.html#getModeByRouteName">getModeByRouteName</a></li><li data-type='method'><a href="Routes.html#getModeByRouteType">getModeByRouteType</a></li><li data-type='method'><a href="Routes.html#getModeList">getModeList</a></li><li data-type='method'><a href="Routes.html#getModes">getModes</a></li><li data-type='method'><a href="Routes.html#getRouteById">getRouteById</a></li><li data-type='method'><a href="Routes.html#getRouteByName">getRouteByName</a></li><li data-type='method'><a href="Routes.html#getRoutes">getRoutes</a></li></ul></li><li><a href="RoutesByStop.html">RoutesByStop</a><ul class='methods'><li data-type='method'><a href="RoutesByStop.html#getModes">getModes</a></li><li data-type='method'><a href="RoutesByStop.html#getStopId">getStopId</a></li><li data-type='method'><a href="RoutesByStop.html#getStopName">getStopName</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Routes.html">Routes</a><ul class='methods'><li data-type='method'><a href="Routes.html#checkHide">checkHide</a></li><li data-type='method'><a href="Routes.html#getModeByRoute">getModeByRoute</a></li><li data-type='method'><a href="Routes.html#getModeByRouteId">getModeByRouteId</a></li><li data-type='method'><a href="Routes.html#getModeByRouteName">getModeByRouteName</a></li><li data-type='method'><a href="Routes.html#getModeByRouteType">getModeByRouteType</a></li><li data-type='method'><a href="Routes.html#getModeList">getModeList</a></li><li data-type='method'><a href="Routes.html#getModes">getModes</a></li><li data-type='method'><a href="Routes.html#getRouteById">getRouteById</a></li><li data-type='method'><a href="Routes.html#getRouteByName">getRouteByName</a></li><li data-type='method'><a href="Routes.html#getRoutes">getRoutes</a></li><li data-type='method'><a href="Routes.html#refresh">refresh</a></li></ul></li><li><a href="RoutesByStop.html">RoutesByStop</a><ul class='methods'><li data-type='method'><a href="RoutesByStop.html#getModes">getModes</a></li><li data-type='method'><a href="RoutesByStop.html#getStopId">getStopId</a></li><li data-type='method'><a href="RoutesByStop.html#getStopName">getStopName</a></li><li data-type='method'><a href="RoutesByStop.html#refresh">refresh</a></li></ul></li><li><a href="StopsByLocation.html">StopsByLocation</a><ul class='methods'><li data-type='method'><a href="StopsByLocation.html#getStopList">getStopList</a></li><li data-type='method'><a href="StopsByLocation.html#refresh">refresh</a></li></ul></li><li><a href="StopsByRoute.html">StopsByRoute</a><ul class='methods'><li data-type='method'><a href="StopsByRoute.html#getDirectionById">getDirectionById</a></li><li data-type='method'><a href="StopsByRoute.html#getDirectionByName">getDirectionByName</a></li><li data-type='method'><a href="StopsByRoute.html#getDirectionList">getDirectionList</a></li><li data-type='method'><a href="StopsByRoute.html#getStopListById">getStopListById</a></li><li data-type='method'><a href="StopsByRoute.html#getStopListByName">getStopListByName</a></li><li data-type='method'><a href="StopsByRoute.html#refresh">refresh</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#findStopById">findStopById</a></li><li><a href="global.html#XMLHttpRequest">XMLHttpRequest</a></li></ul>
 </nav>
 
 <div id="main">
     
-    <h1 class="page-title">Routes.js</h1>
+    <h1 class="page-title">routes/Routes.js</h1>
     
 
     
@@ -43,16 +43,14 @@
 *
 * @author Colin Rioux
 *
-* @requires NPM:XMLHttpRequest
 * @requires NPM:array-unique
 * @requires /src/key.json
+* @requires /src/util/request.js
 */
 "use strict";
-// npm dependencies
-const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const Key = require('../key.json').key;
 const unique = require('array-unique');
-const req = new XMLHttpRequest();
+const RHelper = require('../util/request');
 
 class Routes {
 
@@ -64,7 +62,14 @@ class Routes {
   * @property {JSON} raw Raw json from Routes request.
   */
   constructor() {
-    this.raw = request();
+    this.raw = RHelper.request("routes", {});
+  }
+
+  /**
+  * Refreshes the API without requiring a new Routes object; this overwrites the current raw json.
+  */
+  refresh() {
+      this.raw = RHelper.request("routes", {});
   }
 
   /**
@@ -220,18 +225,8 @@ class Routes {
 }
 
 /**
+* Capitalizes strings.
 * @private
-*/
-function request() {
-    req.open('GET', `http://realtime.mbta.com/developer/api/v2/routes?api_key=${Key}&amp;format=json`, false);
-    req.send();
-    if (req.status === 200)
-      return JSON.parse(req.responseText);
-}
-
-/**
-* @private
-* From stackoverflow...
 */
 String.prototype.capitalize = function() {
   return this.replace(/(^|\s)([a-z])/g, function(m, p1, p2) {
@@ -252,7 +247,7 @@ module.exports = Routes;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.0-dev</a> on Sun Feb 12 2017 01:40:31 GMT-0500 (EST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.0-dev</a> on Sat Feb 18 2017 13:24:32 GMT-0500 (EST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

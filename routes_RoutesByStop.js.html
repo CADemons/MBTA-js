@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>routes/RoutesByStop.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,30 +27,104 @@
 
 <div id="main">
     
+    <h1 class="page-title">routes/RoutesByStop.js</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Accesses Route Query: RoutesByStop
+ * @license MIT
+ *
+ * @author Colin Rioux
+ *
+ * @requires NPM:array-unique
+ * @requires /src/key.json
+ * @requires /src/util/request.js
+ */
+"use strict";
+const Key = require('../key.json').key;
+const RHelper = require('../util/request');
+const unique = require('array-unique');
 
+class RoutesByStop {
+    /**
+     * Creates a new RoutesByStop query object.
+     * @class
+     *
+     * @constructor
+     * @param {(String|Number)} stop GTFS-compatible stop_id value for which routes should be returned.
+     * @property {JSON} raw Raw json from Routes request.
+     */
+    constructor(stop) {
+        switch (typeof stop) {
+            case "string":
+                this.raw = RHelper.request('routesbystop', { "stop" : stop });
+                break;
+            case "number":
+                this.raw = RHelper.request('routesbystop', { "stop" : stop.toString() });
+                break;
+            default:
+                throw "Invalid GTFS-compatible stop_id value";
+                break;
+        }
+    }
 
+    /**
+    * Refreshes the API without requiring a new RoutesByStop object; this overwrites the current raw json.
+    * @param {String|Number} stop GTFS-compatible stop_id value for which routes should be returned.
+    */
+    refresh(stop) {
+        switch (typeof stop) {
+            case "string":
+                this.raw = RHelper.request('routesbystop', { "stop" : stop });
+                break;
+            case "number":
+                this.raw = RHelper.request('routesbystop', { "stop" : stop.toString() });
+                break;
+            default:
+                throw "Invalid GTFS-compatible stop_id value";
+                break;
+        }
+    }
 
+    /**
+     * Returns the stop_id.
+     * @returns {String}
+     */
+    getStopId() { return this.raw.stop_id; }
 
+    /**
+     * Returns the stop_name.
+     * @returns {String}
+     */
+    getStopName() { return this.raw.stop_name; }
 
+    /**
+     * Returns the transportation modes for a given stop.
+     * @returns {JSON[]}
+     */
+    getModes() { return this.raw.modes; }
+}
 
+/**
+ * @private
+ */
+String.prototype.capitalize = function() {
+    return this.replace(/(^|\s)([a-z])/g, function(m, p1, p2) {
+        return p1 + p2.toUpperCase();
+    });
+}
 
-
-
-    
-
-
-    <section class="readme">
-        <article><h1>MBTA-js</h1><p>MBTA Realtime API Helper Library written in javascript.</p>
-<h4>Useful Links</h4><p><a href="http://realtime.mbta.com/Portal/Content/Documents/MBTA-realtime_APIDocumentation_v2_1_3_2017-01-04.pdf">MBTA Realtime API Docs</a></p></article>
+module.exports = RoutesByStop;
+</code></pre>
+        </article>
     </section>
-
-
 
 
 
