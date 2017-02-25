@@ -38,7 +38,7 @@ exports.request = function (query, params) {
 function buildList(params) {
     let arr = [];
     for (var key in params) {
-        if (params.hasOwnProperty(key)) {
+        if (params.hasOwnProperty(key) && params[key] !== undefined) {
             arr.push(`&${key}=${params[key]}`);
         }
     }

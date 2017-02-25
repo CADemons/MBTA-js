@@ -5,11 +5,9 @@
 * @author Colin Rioux
 *
 * @requires NPM:array-unique
-* @requires /src/key.json
 * @requires /src/util/request.js
 */
 "use strict";
-const Key = require('../key.json').key;
 const unique = require('array-unique');
 const RHelper = require('../util/request');
 

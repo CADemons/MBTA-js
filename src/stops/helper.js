@@ -42,11 +42,31 @@ function findStopByCoords(stops, lat, lon) {
     return null;
 }
 
+function getDistanceById(stops, id) {
+    for (var stop in stops) {
+        if (stops[stop].stop_id === id) return stops[stop].distance;
+    }
+    return null;
+}
+
+function getDistanceByName(stops, name) {
+    for (var stop in stops) {
+        if (stops[stop].stop_name === name) return stops[stop].distance;
+    }
+    return null;
+}
+
+function getDistanceByCoords(stops, lat, lon) {
+    return findStopByCoords(stops, lat, lon).distance || null;
+}
 
 module.exports = {
     findStopById,
     findStopByName,
     findStopByParent,
     findStopByParentName,
-    findStopByCoords
+    findStopByCoords,
+    getDistanceById,
+    getDistanceByName,
+    getDistanceByCoords
 }

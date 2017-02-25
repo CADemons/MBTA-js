@@ -5,5 +5,6 @@ module.exports = {
   RoutesByStop: require('./routes/RoutesByStop'),
   StopsByRoute: require('./stops/StopsByRoute'),
   StopsByLocation: require('./stops/StopsByLocation'),
-  StopHelper: require('./stops/helper')
+  StopHelper: require('./stops/helper'),
+  ScheduleByStop: require('./schedule/ScheduleByStop')
 };

@@ -1,15 +1,13 @@
 /**
- * Accesses Route Query: StopsByRoute. 
+ * Accesses Route Query: StopsByRoute.
  * @license MIT
  *
  * @author Colin Rioux
  *
  * @requires NPM:array-unique
- * @requires /src/key.json
  * @requires /src/util/request.js
  */
 "use strict";
-const Key = require('../key.json').key;
 const RHelper = require('../util/request');
 const unique = require('array-unique');
 
