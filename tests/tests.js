@@ -1,4 +1,4 @@
-const StopsByRoute = require('../src/stops/StopsByRoute');
-var routes = new StopsByRoute("Red");
-console.log(routes.getDirectionByName("Southbound"));
+const ScheduleByStop = require('../src/schedule/ScheduleByStop');
+var sch = new ScheduleByStop("Back Bay", "CR-Providence", "0");
+console.log(sch.raw);
 //console.log(routes.checkHide("72/75"));
